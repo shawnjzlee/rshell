@@ -1,0 +1,112 @@
+Script started on Fri 23 Jan 2015 10:45:26 PM PST
+]0;shawnjzlee@ubuntu: ~/Desktop/hw0shawnjzlee@ubuntu:~/Desktop/hw0$ make
+rm -rf ./bin
+mkdir ./bin
+g++ -Wall -Werror -ansi -pedantic ./src/rshell.cpp -o ./bin/rshell
+]0;shawnjzlee@ubuntu: ~/Desktop/hw0shawnjzlee@ubuntu:~/Desktop/hw0$ ./bin/rshell
+getlogin(): no information received: No such file or directory
+guest@ubuntu$ ls #testing command ls            ls command as well as use of comments   being in gnored
+bin  LICENSE  Makefile	Makefile~  README.md  src  tests  typescript
+guest@ubuntu$ ls 0   -l -a-  -r #testing ls command wi ith falg   lag(s)
+total 52
+-rw-rw-r-- 1 shawnjzlee shawnjzlee     0 Jan 23 22:45 typescript
+drwxrwxrwx 2 shawnjzlee shawnjzlee  4096 Jan 23 08:43 tests
+drwxrwxrwx 2 shawnjzlee shawnjzlee  4096 Jan 23 22:43 src
+-rwxrw-rw- 1 shawnjzlee shawnjzlee   884 Jan 23 21:26 README.md
+-rw-rw-r-- 1 shawnjzlee shawnjzlee   265 Jan 23 08:02 Makefile~
+-rwxrw-rw- 1 shawnjzlee shawnjzlee   331 Jan 23 09:20 Makefile
+-rwxrw-rw- 1 shawnjzlee shawnjzlee 18367 Jan 23 08:40 LICENSE
+drwxrwxr-x 2 shawnjzlee shawnjzlee  4096 Jan 23 22:45 bin
+drwxr-xr-x 4 shawnjzlee shawnjzlee  4096 Jan 22 15:29 ..
+drwxrwxr-x 5 shawnjzlee shawnjzlee  4096 Jan 23 22:45 .
+guest@ubuntu$ ls ls ls ls ls ls ls ls #testing use of multiple ls commands ar nd their behaviro  or (working as intended)
+ls: cannot access ls: No such file or directory
+ls: cannot access ls: No such file or directory
+ls: cannot access ls: No such file or directory
+ls: cannot access ls: No such file or directory
+ls: cannot access ls: No such file or directory
+ls: cannot access ls: No such file or directory
+ls: cannot access ls: No such file or directory
+guest@ubuntu$ -l ls #testing g flag in front of command produces an error (as intended)
+execvp(*file, *const argv[]): command not found: No such file or directory
+guest@ubuntu$                                                                                                                                                                #spaces do nothing
+guest@ubuntu$ #the command line below shows that enter does nothing as well
+guest@ubuntu$ 
+guest@ubuntu$                                                                                                                                                                ls                                                                                                                                                                                                                   -a                                                                                                                                                                                                                   -l                                                                                                                                                                                                                    #spaces before  , between, and f after a command and its fa al  lags still pares    ses the command correct   ectly (s in     as  (asin   intended)
+total 52
+drwxrwxr-x 5 shawnjzlee shawnjzlee  4096 Jan 23 22:45 .
+drwxr-xr-x 4 shawnjzlee shawnjzlee  4096 Jan 22 15:29 ..
+drwxrwxr-x 2 shawnjzlee shawnjzlee  4096 Jan 23 22:45 bin
+-rwxrw-rw- 1 shawnjzlee shawnjzlee 18367 Jan 23 08:40 LICENSE
+-rwxrw-rw- 1 shawnjzlee shawnjzlee   331 Jan 23 09:20 Makefile
+-rw-rw-r-- 1 shawnjzlee shawnjzlee   265 Jan 23 08:02 Makefile~
+-rwxrw-rw- 1 shawnjzlee shawnjzlee   884 Jan 23 21:26 README.md
+drwxrwxrwx 2 shawnjzlee shawnjzlee  4096 Jan 23 22:43 src
+drwxrwxrwx 2 shawnjzlee shawnjzlee  4096 Jan 23 08:43 tests
+-rw-rw-r-- 1 shawnjzlee shawnjzlee     0 Jan 23 22:45 typescript
+guest@ubuntu$ ./bin/rshell #@ sh  rshell withoin an        in an rshell works, next command will leave the child rhse   shell  , displays use of exit within rhsell     shell as intended
+getlogin(): no information received: No such file or directory
+guest@ubuntu$ exit
+guest@ubuntu$ ; #does nothing              connector does nothing without commands
+guest@ubuntu$ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; #multiple          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; #miu  ulto iple connectors without commands produces as   n error   (as intended)
+error: syntax error near unexpected token: No such file or directory
+guest@ubuntu$ ;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&|||||||||||||||||||||||:;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                  ;    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;||||||||||||&&&&&&&&&&&&;||&& #multiple connectors w              different connectors without c commands and some validconn     connectors produces an error (as intended)
+error: syntax error near unexpected token: No such file or directory
+guest@ubuntu$ false && ls #true                   true && ls #ls    true with an &&       && connector a to ls command ruy ns ls as inteded
+bin  LICENSE  Makefile	Makefile~  README.md  src  tests  typescript
+guest@ubuntu$ flase && ls #false with a && connector to ls command does not run ls ans  s intended
+execvp(*file, *const argv[]): command not found: No such file or directory
+bin  LICENSE  Makefile	Makefile~  README.md  src  tests  typescript
+guest@ubuntu$ false && ls #correction to the typo above
+guest@ubuntu$ true && ls && false && ls && true && ls && false && ls && true && ls             #this command should n only run ls once, however big    ug witho inco   connector  s and their logic (including r precde  edence  ) causes it to run four times
+bin  LICENSE  Makefile	Makefile~  README.md  src  tests  typescript
+bin  LICENSE  Makefile	Makefile~  README.md  src  tests  typescript
+bin  LICENSE  Makefile	Makefile~  README.md  src  tests  typescript
+bin  LICENSE  Makefile	Makefile~  README.md  src  tests  typescript
+guest@ubuntu$ true |}| |  | ls #true with || connector to ls command does not l run ls as intended
+guest@ubuntu$ false || ls #  false with || connector to ls command runs ls as inst  tended
+bin  LICENSE  Makefile	Makefile~  README.md  src  tests  typescript
+guest@ubuntu$ true || ls || false || ls || true || ls || false || ls @#  # t  this command works as intended (does not run the                comm    ls command does    is not run)
+guest@ubuntu$ ^C
+]0;shawnjzlee@ubuntu: ~/Desktop/hw0shawnjzlee@ubuntu:~/Desktop/hw0$ clear[K[K[K[K[Kclear
+[H[2J]0;shawnjzlee@ubuntu: ~/Desktop/hw0shawnjzlee@ubuntu:~/Desktop/hw0$ ./bin/rshell
+getlogin(): no information received: No such file or directory
+guest@ubuntu$ true ||      true      rue  &^&&   &   && #ytur      true &&       this command line does nothing   (not as in         incoo  oore   re rect bel havior in comparisi on to bash)
+guest@ubuntu$ && true #  this command line does nothing (incorrect behaviro  or in comparison to bash)
+guest@ubuntu$ echo #should be en mpty/ /blank
+
+guest@ubuntu$ echo hello #world  ;    ; a coo mmands are          ents are in gnored after the poiu  und       poun    hashtag             in echo
+hello
+guest@ubuntu$ echo hello#comments not ser parated by space are ignored aa fter in echo
+hello
+guest@ubuntu$ ls#   echo qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnm @  qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnm #log   ng echos are still echoed d
+qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnm
+guest@ubuntu$ ls-a-l-r #valu id fags     lags with ls    the ls command not spe  eparated by a ps  space produces an error
+execvp(*file, *const argv[]): command not found: No such file or directory
+guest@ubuntu$ mkdir test #command runs normally, creates a fi older 'test     "test"
+guest@ubuntu$ cd #command does not work  , command not found since it is not built in bash command
+execvp(*file, *const argv[]): command not found: No such file or directory
+guest@ubuntu$ echo hello; echo world; echoo  ! #semicolons as a connector does not run additional commands  ,    [BUG]
+hello
+guest@ubuntu$ pwd qwertyuiopasdfghjkzxcvbnm #pwd     command runs normally, displays current directory and in gnores argument        non-option arguments
+pwd: ignoring non-option arguments
+/home/shawnjzlee/Desktop/hw0
+guest@ubuntu$ asdkvbaslfkvabjsvlkasbdvaskldvbasdklvjbsdvklasdjbvqw9rufvsdkcjnzxkmxcvmxbcnv,mdfvbaewv                                                                                      ./bin/rshell #testing multiple                 && .b .b  /bin  /rshell && / ./bin/rshell && ./bin/rshell &  * & ./bin/rshell && ./bin/rshell #tests multiple child processes  , requires 6 exits to exit completely
+getlogin(): no information received: No such file or directory
+guest@ubuntu$ exit
+getlogin(): no information received: No such file or directory
+guest@ubuntu$ exit
+getlogin(): no information received: No such file or directory
+guest@ubuntu$ exit
+getlogin(): no information received: No such file or directory
+guest@ubuntu$ exit
+getlogin(): no information received: No such file or directory
+guest@ubuntu$ exit
+getlogin(): no information received: No such file or directory
+guest@ubuntu$ exit
+guest@ubuntu$ #this com ncludes the test
+guest@ubuntu$ exit
+]0;shawnjzlee@ubuntu: ~/Desktop/hw0shawnjzlee@ubuntu:~/Desktop/hw0$ exit
+exit
+
+Script done on Fri 23 Jan 2015 11:12:24 PM PST
