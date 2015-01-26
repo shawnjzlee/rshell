@@ -5,7 +5,7 @@ This project is a simple command shell that reads in user-input commands on one 
 It is a project for **CS100: Software Construction** at [UC Riverside](http://ucr.edu), taught by Mike Izbicki.
 
 ## Installation Guide / How to Use
-Clone this project at: [https://github.com/slee208/rshell.git](https://github.com/slee208/rshell.git).
+Clone this project at: [https://github.com/shawnjzlee/rshell.git](https://github.com/shawnjzlee/rshell.git).
 
 Once cloned, enter a shell and type `cd rshell` to enter the project directory.
 
