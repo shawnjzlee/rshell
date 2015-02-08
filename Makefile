@@ -1,5 +1,5 @@
 #variables
-COMPILE = g++
+COMPILE = g++ --std=c++11
 FLAGS = -Wall -Werror -ansi -pedantic
 DEBUG = $(FLAGS) -g
 
@@ -7,12 +7,25 @@ DEBUG = $(FLAGS) -g
 all: clean
 	mkdir ./bin
 	$(COMPILE) $(FLAGS) ./src/rshell.cpp -o ./bin/rshell
+	$(COMPILE) $(FLAGS) ./src/ls.cpp -o ./bin/ls
 
+rshell: clean
+	mkdir ./bin
+	$(COMPILE) $(FLAGS) ./src/rshell.cpp -o ./bin/rshell
+	
+ls: clean
+	mkdir ./bin
+	$(COMPILE) $(FLAGS) ./src/ls.cpp -o ./bin/ls
+	
 clean:
 	rm -rf ./bin
 
-debug: clean
+debug-rshell: clean
 	mkdir ./bin
 	$(COMPILE) $(DEBUG) ./src/rshell.cpp -o ./bin/rshell
 	gdb ./bin/rshell
-	gdb run /bin/rshell
+
+debug-ls: clean
+	mkdir ./bin
+	$(COMPILE) $(DEBUG) ./src/ls.cpp -o ./bin/ls
+	gdb ./bin/ls
