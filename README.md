@@ -44,4 +44,3 @@ Bugs/Known Issues/Limitations
 * Unless in a directory with all files of hard links `1`, total number of allocated blocks displayed is incorrect.
 * `ls` will not allow directories to be passed in to output its files; however, if files are passed in, it will output those files if they exist.
 * `ls -a` outputs up to 64 characters per line, for better readability in console.
-* Going to any directory before or after the current does not work
