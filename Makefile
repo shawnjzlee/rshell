@@ -1,6 +1,6 @@
 #variables
-COMPILE = g++ --std=c++11
-FLAGS = -Wall -Werror -ansi -pedantic
+COMPILE = g++
+FLAGS = -Wall -Werror -ansi -pedantic --std=c++11
 DEBUG = $(FLAGS) -g
 
 #targets

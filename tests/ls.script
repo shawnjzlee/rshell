@@ -1,0 +1,74 @@
+Script started on Sun 08 Feb 2015 11:29:39 PM PST
+~
+slee208@hammer $ cd Desktop/rshell/bin
+~/Desktop/rshell/bin
+slee208@hammer $ ./ls #testing ls by itself and that color is implemented
+[1;32mls[0m[1;32mrshell[0m typescript[0m
+~/Desktop/rshell/bin
+slee208@hammer $ ./ls -a #testing ls with -a flag
+[1;34;47m.[0m[1;34;47m..[0m[1;32mls[0m[1;32mrshell[0m typescript[0m
+~/Desktop/rshell/bin
+slee208@hammer $ ./ls -aa -l #testing ls with -a and -l flag (separate)
+total 8
+drwx------ 2 slee208 csmajs  4096 Feb  8 23:26[1;34;47m.[0m
+drwx------ 5 slee208 csmajs  4096 Feb  8 23:25[1;34;47m..[0m
+-rwx------ 1 slee208 csmajs 66662 Feb  8 23:25[1;32mls[0m
+-rwx------ 1 slee208 csmajs 15945 Feb  8 23:25[1;32mrshell[0m
+-rw------- 1 slee208 csmajs     0 Feb  8 23:26 typescript[0m
+~/Desktop/rshell/bin
+slee208@hammer $ ./ls -a -l -R #testing ls with -a-,- -l, -R flags (separate, -R does not work)
+total 8
+drwx------ 2 slee208 csmajs  4096 Feb  8 23:26[1;34;47m.[0m
+drwx------ 5 slee208 csmajs  4096 Feb  8 23:25[1;34;47m..[0m
+-rwx------ 1 slee208 csmajs 66662 Feb  8 23:25[1;32mls[0m
+-rwx------ 1 slee208 csmajs 15945 Feb  8 23:25[1;32mrshell[0m
+-rw------- 1 slee208 csmajs     0 Feb  8 23:26 typescript[0m
+~/Desktop/rshell/bin
+slee208@hammer $ ./ls -alR #testing ls with -a, -l, -R flags (together, -R does not work)
+total 8
+drwx------ 2 slee208 csmajs  4096 Feb  8 23:26[1;34;47m.[0m
+drwx------ 5 slee208 csmajs  4096 Feb  8 23:25[1;34;47m..[0m
+-rwx------ 1 slee208 csmajs 66662 Feb  8 23:25[1;32mls[0m
+-rwx------ 1 slee208 csmajs 15945 Feb  8 23:25[1;32mrshell[0m
+-rw------- 1 slee208 csmajs     0 Feb  8 23:26 typescript[0m
+~/Desktop/rshell/bin
+slee208@hammer $ ./ls ls rshell -alR #testing ls with flags and files together
+total 144
+-rwx------ 1 slee208 csmajs 66662 Feb  8 23:25[1;32mls[0m
+-rwx------ 1 slee208 csmajs 15945 Feb  8 23:25[1;32mrshell[0m
+~/Desktop/rshell/bin
+slee208@hammer $ ,./ls -alR ls rshell #testing ls with flags and files together
+total 144
+-rwx------ 1 slee208 csmajs 66662 Feb  8 23:25[1;32mls[0m
+-rwx------ 1 slee208 csmajs 15945 Feb  8 23:25[1;32mrshell[0m
+~/Desktop/rshell/bin
+slee208@hammer $ ./ls .
+[1;32mls[0m[1;32mrshell[0m typescript[0m
+~/Desktop/rshell/bin
+slee208@hammer $ ./ls ..
+stat(): cannot access: No such file or directory
+~/Desktop/rshell/bin
+slee208@hammer $ ./ls -lhelloworld -aR ls rshell #testing bad flag with with good flags and files
+ls: unrecognized option '-lhelloworld'
+~/Desktop/rshell/bin
+slee208@hammer $ ./ls ls helloworld -alR #testing good files with bad file and good flags
+stat(): cannot access: No such file or directory
+~/Desktop/rshell/bin
+
+slee208@hammer $ ./ls /bin -alR #testing ls with outside directory and good flags
+stat(): cannot access: No such file or directory
+~/Desktop/rshell/bin
+
+slee208@hammer $ cp ls ..
+~/Desktop/rshell/bin
+
+slee208@hammer $ cd ..
+~/Desktop/rshell/
+
+slee208@hammer $ ./ls src -alR #testing ls with inner/next directory and good flags
+stat(): cannot access: No such file or directory
+~/Desktop/rshell/bin
+slee208@hammer $ exit
+exit
+
+Script done on Sun 08 Feb 2015 11:34:24 PM PST

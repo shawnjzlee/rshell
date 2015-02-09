@@ -62,6 +62,11 @@ void readDir(vector<string> &dirList, string dirName, int aflag){
             if(dirent_p->d_name[0] != '.') dirList.push_back(dirent_p->d_name);
         }
     }
+    int close_status = closedir(dirp);
+    if(close_status == -1){
+        perror("closedir(): cannot access");
+        exit(-1);
+    }
 }
 
 void makeDir(vector<string> &dirList, const string dirName, int aflag){
@@ -216,7 +221,7 @@ int main(int argc, char * argv[]){
 
     for(; i < argc; i++){
         if(argv[i][0] == flags[0]){
-            for(; j < (int)strlen(argv[i]); j++){
+            for(j = 1; j < (int)strlen(argv[i]); j++){
                 if(argv[i][j] == flags[0]) _flag++;
                 else if(argv[i][j] == flags[1]) aflag++;
                 else if(argv[i][j] == flags[2]) lflag++;
