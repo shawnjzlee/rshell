@@ -29,16 +29,17 @@ Bugs/Known Issues/Limitations
 -----------------------------
 ###rshell
 * `;` connector does not work as intended. Even though multiple commands linked together should execute, only the first command before the `;` executes.
-> **[FIX 0.01 (02/02/15)]**  All connectors are working as intended
+	> **[FIX 0.01 (02/02/15)]**  All connectors are working as intended
 * `cd` produces an error because it is not built into the bash command
 * When scripting on Ubuntu 14.04, rshell will not be able to get username. It will instead throw an error and use default `guest` as its username.
 * Multiple `&&` and `||` connectors does not work as intended because connectors and their logic (as well as precedence) are not implemented correctly; however, single uses of these connectors work as intended.
-> **[FIX 0.01 (02/02/15)]** See FIX 0.01
+	> **[FIX 0.01 (02/02/15)]** See FIX 0.01
 * `exit` does not work on a line with multiple commands. `exit` alone will work; however, `ls; exit` will not.
-> **[FIX 0.01 (02/02/15)]** See FIX 0.01
+	> **[FIX 0.01 (02/02/15)]** See FIX 0.01
 * rshell does not work with infinitely large commands
 * `mkdir test` creates a folder as intended; however, `mkdir test#folder` will treat `folder` as a comment and create a folder named `test`.
 * `touch test` creates a file as intended; however, `touch test#file` will treat `file` as a comment and create a file named `test`.
+
 ###ls
 * `-R` is incomplete. It acts like `-a` and can be combined with other flags for similar results (except total number of blocks allocated).
 * Unless in a directory with all files of hard links `1`, total number of allocated blocks displayed is incorrect.
