@@ -245,6 +245,13 @@ int main(int argc, char * argv[]){
             else list.push_back(argv[i]);
         }
     }
+	if(_flag++ > 1){
+		cerr << "ls: unrecognized option \'";
+		for(i = 1; i < argc; i++)
+			for(; k < (int)strlen(argv[i]); k++) cout << argv[i][k];
+		cerr << "\'" << endl;
+		exit(0);
+	}
     if(isfile){
         if(isdirectory){
             makeDir(list, _list.at(0), aflag);
