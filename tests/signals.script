@@ -1,0 +1,64 @@
+Script started on Sun 08 Mar 2015 07:06:47 PM PDT
+~
+slee208@hammer $ cd Desktop/bin
+~/Desktop/bin
+slee208@hammer $ ./rshell #now testing rshell
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop/bin[0m $ #showing that prompt shows current working path
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop/bin[0m $ #testing cd
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop/bin[0m $ cd .. #changing the current working path
+/home/csmajs/slee208/Desktop
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop[0m $ pwd #explicitly showing the current working path after running `cd ..`
+/home/csmajs/slee208/Desktop
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop[0m $ cd #cd command without an argument will change the current working directory to the home directory, working as intended
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208[0m $ cd ../../../../../root #trying to enter a "Permission denied" directory
+chdir(): cannot change working directory: Permission denied
+/home/csmajs/slee208
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208[0m $ cd ./usr/bin #testing absolute path
+chdir(): cannot change working directory: No such file or directory
+/home/csmajs/slee208
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208[0m $ cd /usr/bin #testing relative path
+/usr/bin
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/usr/bin[0m $ cd /helloworld #testing non-existing path
+chdir(): cannot change working directory: No such file or directory
+/usr/bin
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/usr/bin[0m $ #testing Ctrl+C
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/usr/bin[0m $ 
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/usr/bin[0m $ cat #testing Ctrl+C within the child, should break out of child
+hellow  world
+hello world
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/usr/bin[0m $ echo hello world > test.test #testing redirection and cat
+Open file failed: Permission denied
+Failed to edit permissions: No such file or directory
+Output redirection failed[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/usr/bin[0m $ cd /home/csmajs/slee208/Desktop #returning back to working directory for more testing
+/home/csmajs/slee208/Desktop
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop[0m $ bin/rshell #testing Ctrl+C within the current rshell
+execv(*file, *const _commands_[]): command not found: No such file or directory
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop[0m $ echo hello world > test.test #testing redirection and cat
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop[0m $ cat test.test
+hello world
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop[0m $ ls -la #testing ls
+total 64
+drwx------  3 slee208 csmajs  4096 Mar  8 19:08 .
+drwx------ 47 slee208 csmajs 12288 Mar  8 19:01 ..
+drwx------  2 slee208 csmajs  4096 Mar  8 19:01 bin
+-rwxrwxrwx  1 slee208 csmajs  6439 Mar  8 17:15 cs100-runtests
+-rw-------  1 slee208 csmajs  9302 Mar  8 17:14 ls.cpp
+-rw-------  1 slee208 csmajs   609 Mar  8 19:01 Makefile
+-rw-------  1 slee208 csmajs   954 Mar  8 18:39 .nfs00000000009d9ad70000012f
+-rw-------  1 slee208 csmajs 11900 Mar  8 18:43 rshell.cpp
+-rw-------  1 slee208 csmajs  1029 Mar  8 18:57 signals.script
+-rw-------  1 slee208 csmajs    26 Mar  8 18:40 test.cpp
+-rwxr-xr-x  1 slee208 csmajs    12 Mar  8 19:08 test.test
+-rw-------  1 slee208 csmajs     0 Mar  8 19:02 typescript
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop[0m $ cat test.cpp #showing file test.cpp, simple file to test g++
+int main(){
+	return 0;
+}[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop[0m $ g++ test.cpp #testing g++, which gives an error
+g++: error trying to exec 'as': execvp: No such file or directory
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop[0m $ #test cases complete
+[1;32mslee208@hammer.cs.ucr.edu[0m:[1;34m/home/csmajs/slee208/Desktop[0m $ exit
+~/Desktop/bin
+slee208@hammer $ exit
+exit
+
+Script done on Sun 08 Mar 2015 07:14:30 PM PDT

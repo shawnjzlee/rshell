@@ -1,18 +1,17 @@
-#include <errno.h>
 #include <cstdlib>
 #include <cstring>
+#include <errno.h>
 #include <fcntl.h>
 #include <iostream>
-#include <iterator>
-#include <stdlib.h>
+#include <signal.h>
 #include <stdio.h>
-#include <string>
+#include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <sys/stat.h>
-#include <vector>
+#include <sys/wait.h>
+#include <sys/types.h>
 #include <unistd.h>
+#include <vector>
 using namespace std;
 
 #define PID(x) 	if(wait(0) == -1) perror("wait() failed"); \
@@ -24,16 +23,71 @@ using namespace std;
 					pd = chmod(command[i+1], S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH); \
 					if(pd < 0){ perror("Failed to edit permissions"); check = false; } \
 					return check;
+					
+#define CHWD(x) if(strcmp(x[prev], cmd[0]) == 0) exit(1); \
+				if(strcmp(x[prev], cmd[1]) == 0){ \
+				if(x[prev + 1] != '\0') changeDirectory(x[prev + 1]); \
+				else cout << "Specify a `cd` directory" << endl; }
 
+//global characters to compare with
 char semicolon[] = ";", space[] = " ", operators[] = ";&|", pound[] = "#",
-	 rightarrow[] = ">", leftarrow[] = "<";
+	 rightarrow[] = ">", leftarrow[] = "<", colon[] = ":", backslash[] = "/";
+static int _PID = -1;
+const unsigned size = BUFSIZ, max_size = 1024;
+const char * cmd[size] = {"exit '\0'","cd '\0'"};
 
+//signal handler (ignorance is bliss - ^C diregarded, prints to screen)
+void signalHandler(int sig){
+	if(_PID == 0){
+		if(-1 == kill(0,SIGKILL)) perror("kill(): unable to kill child");
+	}
+	return;
+}
 
+//change working directory
+void changeDirectory(char * PATH){
+	if(-1 == chdir(PATH)) perror("chdir(): cannot change working directory");
+	char * buf = NULL;
+	buf = getcwd(buf, size);
+	cout << buf << endl;
+	delete buf;
+	return;
+}
+
+//tokenization function with different characters
 void tokenization(char * &token, char * command[], int &iterator, char operators[]){
 	while(token != NULL){
 		token = strtok(NULL, operators);
 		command[++iterator] = token;
 	}
+}
+
+//new exec
+int exec(char ** commands){
+	char * envVar, * _envVar;
+	int i = 0, j = 0;
+	
+	if(NULL == (envVar = getenv("PATH"))) perror("getenv(): cannot get environment path");
+	
+	char * envArr[size];
+	_envVar = strtok(envVar, colon);
+	envArr[i] = _envVar;
+	tokenization(_envVar, envArr, i, colon);
+	
+	envArr[i] = '\0';
+	for(; j < i - 1; ++j){
+		char command[size];
+		strcpy(command, envArr[j]);
+		strcat(command, backslash);
+		strcat(command, commands[0]);
+		envArr[j] = command;
+		if(execv(envArr[j], commands) == -1){
+			if(errno == ENOENT) continue;
+			else perror("execv(*file, *const _commands_[]): command not found");
+		}
+	}
+	
+	return -1;
 }
 
 //checks true or false boolean value in the first token
@@ -53,14 +107,17 @@ bool comparatorCheck(const int type, int &falseCount, char * token, int operator
 	return false;
 }
 
+//checks true or false boolean value for fd and permissions with O_TRUNC
 bool checkFileTrunc(int i, char * command[], int &fd, int &pd){
 	CHECK(O_TRUNC);
 }
 
+//checks true or false boolean value for fd and permissions with O_APPEND
 bool checkFileApp(int i, char * command[], int &fd, int &pd){
 	CHECK(O_APPEND);
 }
 
+//input redirection function (<)
 void inputRedirection(int i, char * command[], int &curr, int &prev, int &fd){
 	fd = open(command[i+1], O_RDONLY);
 	if(fd < 0) perror("Open file failed");
@@ -71,8 +128,10 @@ void inputRedirection(int i, char * command[], int &curr, int &prev, int &fd){
 		if((PID = fork()) < 0) perror("fork() failed");
 		else if(PID == 0){
 			if(dup2(fd, 0) == -1) perror("dup2() failed");
-			if(execvp(command[prev], command) == -1)
-			perror("execvp(*file, *const _commands_[]): command not found");
+			CHWD(command)
+			if(exec(command) == -1) perror("execv(*file, *const _commands_[]): command not found");
+			// if(execvp(command[prev], command) == -1)
+			// perror("execvp(*file, *const _commands_[]): command not found");
 		}
 		else{
 			PID(leftarrow);
@@ -80,6 +139,7 @@ void inputRedirection(int i, char * command[], int &curr, int &prev, int &fd){
 	}
 }
 
+//output redirection function (>)
 void outRedirection(int i, char * command[], int &curr, int &prev, int &fd, int &pd){
 	if(checkFileTrunc(i, command, fd, pd)){
 		curr = i;
@@ -87,10 +147,12 @@ void outRedirection(int i, char * command[], int &curr, int &prev, int &fd, int 
 		int PID;
 		if( (PID = fork()) == -1) perror("fork() failed");
 		else if(PID == 0){
-		if(dup2(fd, 1) == -1) perror("dup2() failed");
-		if(execvp(command[prev], command) == -1)
-		perror("execvp(*file, *const _commands_[]): command not found");
-		exit(1);
+			CHWD(command)
+			if(dup2(fd, 1) == -1) perror("dup2() failed");
+			if(exec(command) == -1){
+				perror("execv(*file, *const _commands_[]): command not found");
+				exit(1);
+			}
 		}
 		else{
 			PID(rightarrow);
@@ -99,6 +161,7 @@ void outRedirection(int i, char * command[], int &curr, int &prev, int &fd, int 
 	else cerr << "Output redirection failed";
 }
 
+//piping function (|)
 void piping(int j, char * command[]){
 	int pipeIndex = 0, _pipeIndex = 0, i = 0;
 	bool pipeCheck = false;
@@ -149,27 +212,39 @@ void piping(int j, char * command[]){
     piping(j, _pipe);
 }
 
-int main(){
-	//initialize defaults (size, char arrays, strings); does not reset
-	const unsigned size = BUFSIZ, max_size = 1024;
-//	char semicolon[] = ";", space[] = " ", operators[] = ";&|", pound[] = "#",
-//		 leftarrow[] = ">", rightarrow[] = "<";
-	string _exit = "exit";
-
-	//get login and host name for prompt '$'
-    char * username = getlogin();
-    if(username == NULL){
+//gets login, host name, current directory for prompt '$'
+void initializePrompt(){
+	char * username = getlogin();
+	if(username == NULL){
 		perror("getlogin(): no information received");
 		char guest[] = "guest";
 		username = guest;
 	}
-    char hostname[size]; //= new char[max_size];
-    int checkHost = gethostname(hostname, max_size);
-    if(checkHost == -1) perror("gethostname(): no information received");
+	cout << "\033[1;32m"  <<username << "@";
+	
+	char hostname[size];
+	int checkHost = gethostname(hostname, max_size);
+	if(checkHost == -1) perror("gethostname(): no information received");
+	
+	cout << hostname << "\033[0m" << ":" ;
+	
+	char * currentDir = NULL;
+	currentDir = getcwd(currentDir, max_size);
+	if(currentDir== NULL) perror("getcwd(): no information received");
+	
+	cout << "\033[1;34m" << currentDir << "\033[0m" << " $ ";
+	
+	delete currentDir;
+	return;
+} 
+
+int main(){
+	signal(SIGINT, signalHandler);
+	string _exit = "exit", _cd = "cd";
 
 	//input string and tokenization
     while(true){
-		cout << username << "@" << hostname << "$ ";
+		initializePrompt();
 		string cmdStr;
 
 		//initialize defaults (resets within the scope of the while loop)
@@ -226,6 +301,7 @@ int main(){
 			if(_operatorCheck >= 1){
 				perror("error: syntax error near unexpected token");
 				falseFlag = true;
+				delete [] cmdChar;
 				break;
 			}
 			i++;
@@ -260,6 +336,7 @@ int main(){
 				for(k = 0; k < numOfOps; ++k){
 					argc = -1;
 					_token_ = strtok(_commands[k], space);
+					char * temp = _token_;
 					_commands_[++argc] = _token_;
 					tokenization(_token_, _commands_, argc, space);
 					_commands_[++argc] = '\0';
@@ -285,9 +362,11 @@ int main(){
 								if( (PID = fork()) == -1) perror("fork() failed");
 								else if(PID == 0){
 									if(dup2(fd, 1) == -1) perror("dup2() failed");
-									if(execvp(_commands_[prev], _commands_) == -1)
-									perror("execvp(*file, *const _commands_[]): command not found");
-									exit(0);
+									CHWD(_commands_)
+									if(exec(_commands_) == -1){
+										perror("execv(*file, *const _commands_[]): command not found");
+										exit(0);
+									}
 								}
 								else{
 									if(wait(0) == -1) perror("wait() failed");
@@ -310,18 +389,34 @@ int main(){
 						int PID = fork(), _status = 0;
 						if(PID == -1) perror("fork() failed");
 						else if(PID == 0){
-							if(execvp(_commands_[0], _commands_) == -1) 
-								perror("execvp(*file, *const _commands_[]): command not found");
+							if(temp != NULL){
+								if(strcmp(temp, _exit.c_str()) == 0) exit(2);
+								else if(strcmp(temp, _cd.c_str()) == 0) exit(3);
+								else{
+									if(-1 == exec(_commands_)) perror("execv(*file, *const _commands_[]): command not found");
+								}
+							}
+							// if(execvp(_commands_[0], _commands_) == -1) 
+							// 	perror("execvp(*file, *const _commands_[]): command not found");
 							exit(1);
 						}
 						else{
-							int _waitpid = wait(&_status);
-							if(-1 == _waitpid) perror("wait() failed");
+							int status;
+							if(-1 == waitpid(0, &status, 0)) perror("wait() failed");
+							if(status == 512) exit(1);
+							if(status == 768){
+								if(_commands_[1] != '\0'){
+									changeDirectory(_commands_[1]);
+								}
+								else{
+									char * HOME = getenv("HOME");
+									if(-1 == chdir(HOME)) perror("chdir(): cannot change directory");
+								}
+							}
 						}
 						
 						//connector '&|' logic using vector of symbols and wait status pointer
 						if(cmdSym.size() == 0) break;
-						cout << cmdSym.at(0);
 				        if(cmdSym.at(0) == operators[1]){
 				            if(_status != 0) break;
 				        }
