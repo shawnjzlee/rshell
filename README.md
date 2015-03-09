@@ -46,3 +46,11 @@ Bugs/Known Issues/Limitations
 * `ls` will not allow directories to be passed in to output its files; however, if files are passed in, it will output those files if they exist.
 * `ls -a` outputs up to 64 characters per line, for better readability in console.
 * `ls` cannot access directories before and after it because it cannot recognize the location.
+
+###io redirection
+* `>`, `>>` and `<` work as long as there are spaces on the between arguments.
+* `|` outputs what is passed in through redirection, but does not work with `grep` and similar commands
+
+###signals and changing directory
+* calling a shell within a shell, as well as `g++`, does not work
+* `cd`,`ls`, `cat`, `pwd`, `echo` work within rshell
